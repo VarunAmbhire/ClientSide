@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To-Do 1</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+    Enter Task : 
+    <input type="text" id="text">
+
+    <div id="taskList"></div>
+
+    <script>
+        retreiveData();
+        var taskList=[];
+        var text=$("#text");
+        text.on("keypress", addTask);
+
+        createView();
+
+        function addTask(event){
+            retreiveData();
+            if(event.key=="Enter"){
+                var data={};
+                data.text=text.val();
+                data.isCompleted=false;
+                taskList.push(data);
+                storeData(); 
+                createView();
+                text.val("");
+            }
+        }
+
+        function removeTask(){
+             taskList.splice((this.id).substring(1),1);                          
+             storeData();
+             createView();
+        }
+
+        function strikeTask(event){
+            console.log($("#label"+((this.id).substring(3))).text());
+            var mark=event.target.checked;
+            var index=(this.id).substring(3);
+            if(mark==true){
+                    taskList[index].text="<strike>"+taskList[index].text+"</strike>";
+                    taskList[index].isCompleted=true;
+            }else if(mark==false){        
+                taskList[index].text=(taskList[index].text).slice(8,-9);
+                taskList[index].isCompleted=false;    
+            }
+            storeData();
+            createView();
+        }
+
+        function createView(){
+            $("#taskList").text("   ");
+            retreiveData();
+            for(var i=0;i<taskList.length;i++){
+                $("#taskList").append("<li id="+i+"></li>");
+                $("<label/>").attr("id","label"+i).html(taskList[i].text).appendTo($("#"+i));
+                $("<input>").attr("type","checkbox").attr("id","chk"+i).prop("checked",taskList[i].isCompleted).appendTo($("#"+i));
+                $("#"+i).append("<button id=b"+i+">X</button>");
+                $("#b"+i).on("click",removeTask);
+                $("#chk"+i).on("click",strikeTask);
+            }
+        }
+
+        function storeData(){
+            localStorage.setItem("swabhav.jlocal",JSON.stringify(taskList));
+        }
+
+        function retreiveData(){
+            taskList=JSON.parse(localStorage.getItem("swabhav.jlocal"));
+        }
+
+    </script>
+</body>
+</html>

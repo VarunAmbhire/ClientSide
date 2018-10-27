@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Function </title>
+    </head>
+    <body>
+
+        <script>
+                f2();
+                // f1();
+
+                a=1;    
+                console.log(a); 
+
+                var f1=function(){
+                    console.log("Invoke function f1");
+                }
+
+                function f2(){
+                    console.log("Invoke function f2");
+                }
+
+                function f3(no1,no2,callback){
+                    var r=no1*no2;
+                    callback(r);
+                }
+
+                f3(10,5,printResult);
+                f3(5,3,function(r){
+                    console.log(r);
+                });
+
+                function printResult(result){
+                    console.log(result);
+                }
+
+                f1();
+                f2();
+                var a;
+
+
+                function interval(){
+                    console.log("Interval "+a);
+                    a++;
+                }
+
+                var intervalEnd= setInterval(interval,1000);
+
+                function intervalProcess(){
+                    console.log("And it's over Interval, Timeout!!!");
+                    clearInterval(intervalEnd);
+                }
+
+                setTimeout(intervalProcess,10000);
+                
+        </script>
+    </body>
+</html>

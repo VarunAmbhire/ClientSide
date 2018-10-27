@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Async Pattern</title>
+</head>
+<body>
+    <script>
+        var dataService=function(){
+            var obj={};
+            obj.getDataService=function(){
+                var ran=Math.random()*10;
+                if(ran>5)
+                    return ran;
+                throw "Random Number Error."+ran;                
+            }
+            
+            obj.getAsyncDataService=function(cb){
+                setTimeout(function(){
+                    var num=Math.random()*100;
+                    if(num>5){
+                        cb(num);
+                    }else{
+                        throw "error "+num;
+                    }
+                },1000);
+            }
+          return obj;  
+        }();
+
+        console.log(dataService.getDataService());
+
+        dataService.getAsyncDataService(function(r){
+            console.log(r);
+        });
+
+        console.log("End of program");
+    </script>
+</body>
+</html>

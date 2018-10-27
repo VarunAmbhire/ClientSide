@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quetion Bank</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="quetion" ng-controller="queControl">
+    <!-- <div ng-show=""></div> -->
+    <p ng-model="index"></p>{{index}}
+    <p ng-model="que"></p>{{que}}
+    <div ng-repeat="opt in options">
+        <input type="radio" ng-model="select[$parent.$index]" ng-value="[$index]" name="option"/>
+        {{opt}}
+    </div>  
+     <input type="button" value="next" ng-click="nextButton()">
+    {{select[$parent.$index]}}{{res}}
+    <script>
+        angular.module("quetion",[])
+               .factory("getData",function($http, $q){
+                   var obj={};
+                        obj.data=()=>{
+                            return $http.get("http://192.168.137.1/jquery-app/question.json");
+                        }
+                        obj.next=()=>{
+                            return $q(function(resolve){
+                                resolve();
+                            })
+                        }
+                        obj.result=()=>{
+                            return $q(function(resolve){
+                                resolve();
+                            })
+                        }
+                   return obj;
+               })
+               .controller("queControl",($scope,getData)=>{
+                   $scope.data=[];
+                   $scope.select=[];
+                   $scope.i=0;
+                   $scope.res=0;
+                   getData.data().then(function(response){
+                        $scope.data=response.data;
+                        $scope.displayData($scope.i);
+                    });
+                  $scope.nextButton=()=>{ getData.next().then(function(){
+                        if($scope.answer==('option['+$scope.select.undefined+']')){
+                            $scope.res++;
+                        }
+                        $scope.i++;
+
+                        if($scope.i<$scope.data.length){
+                            $scope.displayData($scope.i);
+                        }else{
+                            getData.result().then(function(){})
+                        }
+                   })
+                }
+                $scope.displayData=(i)=>{            
+                        $scope.index=$scope.data[i].id;   
+                        $scope.que=$scope.data[i].content;
+                        $scope.options=$scope.data[i].option;
+                        $scope.answer=$scope.data[i].answer;
+                }
+               })
+    </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <title>
+            To-Do 2
+        </title>
+    </head>
+    <body>
+        <div id="inputArea">
+            Task :
+            <input type="text" id="inputText" onkeypress="addTask(event)">
+        </div>
+
+        <div id="displayTask"></div>
+
+        <script>
+            var mainDiv=document.querySelector("#displayTask");
+            var index=0;
+
+            function addTask(event){
+                    if(event.charCode==13){
+                    index++;    
+                    var text=document.querySelector("#inputText");
+
+                    var addDiv=document.createElement("DIV");
+                    addDiv.setAttribute("id","List "+index);
+                    addDiv.style.margin=10;
+                    addDiv.style.height=25;
+                    addDiv.style.backgroundColor="red";
+
+                    var removeButton=document.createElement("button");
+                    var checkBox=document.createElement("input");
+                    var label=document.createElement("LABEL");
+
+                    label.setAttribute("id","Label"+index);
+                    label.innerHTML=text.value;
+
+                    checkBox.type="checkbox";
+                    checkBox.setAttribute("id","Checkbox"+index);
+                    checkBox.style.float="right"
+                    checkBox.addEventListener("click",markTask);
+                    
+
+                    removeButton.setAttribute("id","button "+index);
+                    removeButton.innerHTML="X";
+                    removeButton.style.float="right";                    
+                    removeButton.addEventListener("click",removeTask);
+                    
+                    mainDiv.appendChild(addDiv);
+                    addDiv.appendChild(label);                    
+                    addDiv.appendChild(removeButton);
+                    addDiv.appendChild(checkBox);
+                    text.value="";
+                    }
+            }
+
+            function markTask(event){
+                var mark=event.srcElement.checked;
+                var labelText=document.getElementById(event.srcElement.id).parentNode.firstChild;
+                    if(mark==true){
+                        labelText.innerHTML=labelText.innerHTML.strike();
+                    }else if(mark==false){
+                        labelText.innerHTML=labelText.textContent;
+                    }
+            }
+
+            function removeTask(event){
+                var child=event.srcElement.id;
+                var divId=document.getElementById(child).parentNode;
+                mainDiv.removeChild(divId);
+            }
+        </script>
+
+    </body>
+</html>

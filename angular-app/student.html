@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student</title>
+    <script src="angular.js"></script>
+    <style>
+            table, th, td {
+            border: 1px solid black;
+            }
+            input.ng-invalid {
+                background-color:pink;
+            }
+            input.ng-valid {
+                background-color:white;
+            }
+            input.ng-pristine {
+                background-color:white;
+            }
+    </style>
+</head>
+<body ng-app="student" ng-controller="studControl">
+    <div>
+        <p>Roll Number : <input name="rollNo" type="number" ng-model="rollNo" ng-required="true">
+            <span ng-show="rollNo.$touched && rollNo.$invalid.required">rollNo is required.</span></p>
+        <p>Name        : <input type="text" ng-model="name" ng-required="true"></p>
+        <p>Age         : <input type="number" ng-model="age" ng-required="true"></p>
+        <p>e-mail      : <input type="email" ng-model="email" ng-required="true"></p>
+        <p>Date : <input type="date" ng-model="date" ng-required="true"></p>
+        <p>Gender  : <input type="radio" name="gender" ng-model="isMale" value="true" checked>Male
+            <input type="radio" name="gender" ng-model="isMale" value="false">Female</p>
+        <input type="button" value="Add" ng-click="addButton()">
+        <input type="button" value="Get" ng-click="getButton()">
+        <input type="button" value="Update" ng-click="updateButton()">
+    </div><br><br>
+
+    Found <b>{{length}}</b> Students <br>
+    <div >
+        <table>
+                <tr>
+                        <th>Roll No.</th>
+                        <th>Name</th> 
+                        <th>Age</th>
+                        <th>e-mail</th>
+                        <th>Date</th>
+                        <th>isMale</th>
+                </tr>
+                <tr ng-repeat="student in studentList">
+                        <th>{{student.rollNo}}</th>
+                        <th>{{student.name}}</th> 
+                        <th>{{student.age}}</th>
+                        <th>{{student.email}}</th>
+                        <th>{{student.date}}</th>
+                        <th ng-style="student.isMale && {'background-color':'gray'} || {'background-color': 'pink'}">{{student.isMale}}</th>
+                        <th><input type="button" value="Edit" ng-click="edit(student.rollNo)"></th>
+                        <th><input type="button" value="Delete" ng-click="delete(student.rollNo)"></th>
+                </tr>
+        </table>
+    </div>
+    
+    <script>
+        angular.module("student",[])
+               .service("getLink",function($http){
+                   var obj={};
+                   obj.getData=()=>{
+                       return $http.get("http://gsmktg.azurewebsites.net/api/v1/techlabs/test/students");
+                   }
+                   obj.postData=(content)=>{
+                       return $http.post("http://gsmktg.azurewebsites.net/api/v1/techlabs/test/students",JSON.stringify(content));
+                   }
+                   obj.displayData=(id)=>{
+                       return $http.get("http://gsmktg.azurewebsites.net/api/v1/techlabs/test/students/"+id);
+                   }
+                   obj.editPost=(id,content)=>{
+                       return $http.put("http://gsmktg.azurewebsites.net/api/v1/techlabs/test/students/"+id, content);
+                   }
+                   obj.deletePost=(id)=>{
+                       return $http.delete("http://gsmktg.azurewebsites.net/api/v1/techlabs/test/students/"+id);
+                   }
+                   return obj;
+               })
+               .controller('studControl',($scope, getLink, $window)=>{
+                   $scope.studentList=[];
+                    $scope.chkMale={
+                        "background-color" : "pink"
+                    }
+                    $scope.getButton=()=>{
+                    getLink.getData().then(function(response){
+                            $scope.studentList=response.data;
+                            $scope.length=$scope.studentList.length;
+                    });
+                    }
+
+                    $scope.edit=(num)=>{
+                            getLink.displayData(num).then(function(response){
+                                $scope.num=num;
+                                $scope.rollNo=response.data.rollNo;
+                                $scope.name=response.data.name;
+                                $scope.age=response.data.age;
+                                $scope.email=response.data.email;
+                                $scope.date=response.data.date;
+                        })
+                    }
+
+                    $scope.updateButton=()=>{
+                        $scope.content={
+                            rollno :$scope.rollNo,
+                            name:$scope.name,
+                            age:$scope.age,
+                            email:$scope.email,
+                            date:$scope.date,
+                            isMale:$scope.isMale
+                        };
+                        getLink.editPost($scope.num,$scope.content).then(function(response){
+                            getLink.getData().then(function(response){
+                            $scope.studentList=response.data;
+                            $scope.length=$scope.studentList.length;
+                            });
+                            $scope.rollNo="";
+                            $scope.name="";
+                            $scope.age="";
+                            $scope.email="";
+                            $scope.date="";
+                        })
+                    }
+
+                    $scope.delete=(num)=>{
+                       if( $window.confirm("Do you really Want to delete???")){
+                        getLink.deletePost(num).then(function(response){
+                            console.log(response);
+                            getLink.getData().then(function(response){
+                            $scope.studentList=response.data;
+                            $scope.length=$scope.studentList.length;
+                            });
+                        })}
+                    }
+
+                    $scope.addButton=()=>{
+                        $scope.content={
+                            rollno :$scope.rollNo,
+                            name:$scope.name,
+                            age:$scope.age,
+                            email:$scope.email,
+                            date:$scope.date,
+                            isMale:$scope.isMale
+                        };
+                        
+                        getLink.postData($scope.content).then(function(response){                       
+                            $scope.rollNo="";
+                            $scope.name="";
+                            $scope.age="";
+                            $scope.email="";
+                            $scope.date="";
+                            getLink.getData().then(function(response){
+                            $scope.studentList=response.data;
+                            $scope.length=$scope.studentList.length;
+                            });
+                        })
+                       
+                        
+                    }
+               })
+    </script>
+</body>
+</html>

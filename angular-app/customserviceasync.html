@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Custom Service Async</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="Async">
+    <div ng-controller="evenControl">
+        <p>Even Cube</p>
+        <input type="number" ng-model="evenNum">
+        <input type="button" value="ok" ng-click="evenClick()">
+        <p ng-style="style">{{result}}</p>
+    </div><hr>
+    <div ng-controller="oddControl">
+        <p>Odd Cube</p>
+        <input type="number" ng-model="oddNum">
+        <input type="button" value="ok" ng-click="oddClick()">
+        <p ng-style="style">{{result}}</p>
+    </div>
+
+    <script>
+        angular.module("Async",[])
+                .service("mathService",function($log,$rootScope, $q){
+                        var obj={};
+                            obj.evenNumber=function(num){
+                                return $q(function(resolve, reject){                                
+                                        if(num%2==0){
+                                            resolve(num);
+                                        }else{
+                                            reject(num);
+                                        }
+                                })
+                            }
+                            obj.oddNumber=function(num){
+                                return $q(function(resolve, reject){                                
+                                        if(num%2!=0){
+                                            resolve(num);
+                                        }else{
+                                            reject(num);
+                                        }                            
+                                })
+                            }
+                        return obj;
+                })
+                .controller("evenControl",($scope, mathService)=>{
+                    $scope.evenClick=()=>{
+                        mathService.evenNumber($scope.evenNum)
+                                .then(function(r){
+                                    $scope.result="Cube of even "+(r*r*r);
+                                    $scope.style={};
+                                })
+                                .catch(function(r){
+                                    $scope.result=r+ " is not even number"
+                                    $scope.style={"color":"red"};
+                                });
+                                console.log("even Cube");
+                            }
+                })
+                .controller("oddControl",($scope, mathService)=>{
+                    $scope.oddClick=()=>{
+                        mathService.oddNumber($scope.oddNum)
+                                    .then(function(r){
+                                        $scope.result="Odd of even "+(r*r*r);
+                                        $scope.style={};
+                                    })
+                                .catch(function(r){
+                                    $scope.result=r+ " is not Odd number";
+                                    $scope.style={"color":"red"};
+                            });
+                                console.log("odd Cube");
+                    }
+                    console.log("End of hit");
+                })
+
+    </script>
+</body>
+</html>

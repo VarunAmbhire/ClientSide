@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>Slider pract</title>
+    </head>
+    <body>
+        <input type="range" id="slideControl" min="1" max="100" value="10" onchange="slideContoller()">
+        
+        <p id="slideDisplay"></p>
+
+        <p id="messageDisplay" ></p>
+
+        <div id="buttonDisplay">
+            <!-- <input type="button" id="button" onclick="buttonClick()"> -->
+        </div>
+
+
+        <script>            
+            slideContoller();
+
+
+            function slideContoller(){                
+                var slideData=document.querySelector("#slideControl").value;
+                document.querySelector("#slideDisplay").innerHTML=slideData;
+                document.querySelector("#messageDisplay").innerHTML="";
+                var buttonDisplay=document.querySelector("#buttonDisplay");
+                buttonDisplay.innerHTML="";
+                for(index=1;index<=slideData;index++){
+                    var buttonName=document.createElement("BUTTON");
+                    buttonName.setAttribute("id",index);
+                    buttonName.addEventListener('click',buttonClick);
+                    buttonName.innerHTML=index;
+                    buttonName.style.height=60;
+                    buttonName.style.width=100;
+                    buttonName.style.margin=5;
+                    buttonDisplay.appendChild(buttonName);  
+                                            
+                }        
+
+            }                    
+
+            function buttonClick(event){ 
+                var index=event.srcElement.id;
+                console.log(index);
+                document.querySelector("#messageDisplay").innerHTML=index+" button Clicked";
+            }
+            
+        </script>
+    </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blue Ball Game</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+    <p id="attemptDisplay">Attempt Remaining : 5</p>
+    <p id="gameStatus">Playing</p>
+
+    <div id="display">
+        <h1>Rules</h1>
+        <li>Game Contain 50 Balls in that 1 Blue ball is hidden.</li>
+        <li>Balls which is left of blue ball are red and the ball at right are green in color.</li>
+        <li>Only 5 attempts are there to find Blue Ball</li>
+
+        <input type="button" id="startButtton" value="Start">
+    </div>
+
+    <script>
+        $("#startButtton").on("click",startGame);
+        var blueBall;
+        var attempt=5;
+        
+        function startGame(){
+            attempt=5;
+            
+            $("#attemptDisplay").text("Attempts remains : "+5);
+            $("#gameStatus").text("Playing");
+            blueBall=Math.floor(Math.random()*50)
+            $("#display").html("");
+            for(var i=1;i<=50;i++){
+                $("#display").append("<button id="+i+">"+i+"</button>");
+                $("#"+i).on("click",checkColor).css("margin",10)
+                                                .height(50)
+                                                .width(40)
+                                                .css("border-radius",50);
+
+            }
+        }
+
+        function checkColor(){
+            attempt--;
+
+            checkAttempt(attempt);
+            if(blueBall==this.id && attempt>=0){
+                $("#attemptDisplay").text("Attempts remains : "+attempt);
+                $("#"+this.id).css("background-color","blue");
+                $("#gameStatus").text("Win");
+                attempt=0;
+                gameEnd();
+            }else{    
+            otherBall(this.id);
+            }
+        }
+
+       function otherBall(id){       
+            if(id<blueBall && attempt>=0){
+                    $("#attemptDisplay").text("Attempts remains : "+attempt);
+                $("#"+id).css("background-color","red");
+            }else if(id>blueBall && attempt>=0){
+                $("#attemptDisplay").text("Attempts remains : "+attempt);
+                $("#"+id).css("background-color","green");
+            }
+        }
+
+        function gameEnd(){ 
+            $("#display").append("<button id=restart>Restart</button>");
+            $("#restart").on("click",startGame);       
+        }
+
+        function checkAttempt(attempt){
+            if(attempt==0){                
+                $("#gameStatus").text("FAil");
+                gameEnd();
+            }
+        }
+    </script>
+</body>
+</html>

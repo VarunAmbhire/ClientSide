@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shopping Cart</title>
+    <script src="angular.js"></script>
+    <style>
+        table,th,td{
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body ng-app="shopping" ng-controller="shoppingControl">
+    <p>
+        Product : 
+        <select ng-model="product" ng-options="product.name for product in productList"></select>
+    </p>
+    <p>
+        Quantity :
+        <input type="number" ng-model="quantity">
+        <input type="button" value="Add to Cart" ng-click="addToCart(product, quantity)">
+    </p><hr>
+
+     <table>
+         <tr>
+             <!-- <th>No.</th> -->
+             <th>Product Id</th>
+             <th>Product</th>
+             <th>Price</th>
+             <th>Quantity</th>
+             <th>Amount</th>
+         </tr>
+         <tr ng-repeat="prod in products">
+                <!-- <th>{{prod.no}}</th> -->
+                <th>{{prod.id}}</th>
+                <th>{{prod.name}}</th>
+                <th>{{prod.price}}</th>
+                <th>{{prod.quantity}}</th>
+                <th>{{prod.amount}}</th>
+                <th><input type="button" value="Add" ng-click="addMore(prod)"></th>
+                <th><input type="button" value="Remove" ng-click="removeProduct(prod)"></th>
+            </tr>
+
+         <tr>
+             <th colspan=2>Total Amount</th>
+             <th colspan=3>{{totalAmount}}</th>
+             <th colspan="2"><input type="button" value="Dispatch" ng-click="dispatch()"></th>
+         </tr>   
+     </table>
+
+    <script>
+        angular.module("shopping",[])              
+               .controller("shoppingControl",($scope, productService)=>{
+                   $scope.productList=[{id:101, name:"Apple", price:50000,},{id:102, name:"Samsung S", price:35000,},
+                                        {id:103, name:"Moto Z", price:28000,},{id:104, name:"Google Pixel", price:45000,},
+                                        {id:105, name:"Redmi Note", price:17000,},{id:106, name:"Oppo", price:12000,},
+                                        {id:107, name:"Giomi", price:8000,}];
+
+                   $scope.products=[];
+                   
+
+                  var prod={};
+                   $scope.addToCart=(product, quantity)=>{
+                       productService.add().then(function(){
+                        prod={
+                                id:product.id,
+                                name:product.name,
+                                price:product.price,
+                                quantity:quantity,
+                                amount:product.price*quantity,
+                            };
+                        // if(prod.)
+                                $scope.products[index]=prod;
+                       $scope.totalAmount=0;
+                       for(var i=0;i<$scope.products.length;i++){
+                           $scope.totalAmount=$scope.totalAmount+$scope.products[i].amount;
+                       }
+                    
+                    })
+                   }
+                
+
+            $scope.addMore=(prod)=>{
+                productService.add().then(function(){
+                    $scope.products[$scope.products.indexOf(prod)].quantity++;
+                    $scope.products[$scope.products.indexOf(prod)].amount=
+                    $scope.products[$scope.products.indexOf(prod)].amount + $scope.products[$scope.products.indexOf(prod)].price;
+                    $scope.totalAmount=0;
+                       for(var i=0;i<$scope.products.length;i++){
+                           $scope.totalAmount=$scope.totalAmount+$scope.products[i].amount;
+                       }
+                })
+           }
+
+            $scope.removeProduct=(prod)=>{
+                if($scope.products[$scope.products.indexOf(prod)].quantity==1){
+                    $scope.products.splice($scope.products.indexOf(prod),1);
+                }else{
+                    $scope.products[$scope.products.indexOf(prod)].quantity--;
+                    $scope.products[$scope.products.indexOf(prod)].amount=
+                    $scope.products[$scope.products.indexOf(prod)].amount - $scope.products[$scope.products.indexOf(prod)].price;
+                    $scope.totalAmount=0;
+                       for(var i=0;i<$scope.products.length;i++){
+                           $scope.totalAmount=$scope.totalAmount+$scope.products[i].amount;
+                       }
+                }
+            }
+
+               })
+               .service("productService",function($q){
+                   var obj={};
+                   obj.add=()=>{
+                       return $q(function(resolve){
+                            resolve();
+                       })
+                   }
+                   return obj;
+               })
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Arrow Test</title>
+</head>
+<body>
+    <script>
+        var dataService = () =>{
+            var obj={};
+            obj.getData = () => new Promise((resolve, reject)=>{
+                var num=Math.random()*100;
+                if(num>5){
+                    resolve(num);
+                }else{
+                    reject(num);
+                }
+            });
+            return obj;
+        }
+
+        dataService().getData().then((r)=>console.log(r))
+                            .catch((err)=>console.log("NOt Applicable"));
+
+        console.log("End Of Program");
+    </script>
+</body>
+</html>

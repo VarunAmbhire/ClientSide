@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Function 2</title>
+    </head>
+    <body>
+        
+
+        <script>
+           
+               var student1={}; 
+                student1.firstName = "capt";
+                student1.lastName = "Soap";
+                student1.getDetails= 
+                function(){
+                    return this.firstName+" "+this.lastName;
+                };    
+                console.log(student1.getDetails());
+            
+                var json=JSON.stringify(student1);
+                console.log(json);
+
+                var reverseJSON=JSON.parse(json);
+                console.log(reverseJSON);
+        </script>
+    </body>
+</html>

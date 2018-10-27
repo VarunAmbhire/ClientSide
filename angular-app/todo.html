@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To-Do</title>
+    <script src="angular.js"></script>
+
+  
+</head>
+<body ng-app="todo" ng-controller="todoControl">
+    Enter Task : <input type="text" ng-model="tasks" ng-keypress="addTask($event)">
+    <!-- <input type="button" value="Add" ng-click="addTask()"> -->
+
+    <div ng-repeat="task in taskList track by $index" >
+        <li>
+            <b ng-style="task.strike">{{task.name}}</b>
+            <input type="checkbox" ng-model="change" ng-checked="task.change" ng-change="strikeOut(change,$index)">
+            <input type="button" value="X" ng-click="removeTask($index)">
+        </li>
+    </div>
+
+    <script>
+        angular.module("todo",[])
+               .controller("todoControl",($scope)=>{
+                    $scope.taskList=[];
+                    $scope.taskList=JSON.parse(localStorage.getItem("angularToDo"));
+       
+                   $scope.addTask=(event)=>{
+                       if(event.keyCode==13){
+                            $scope.task={name:$scope.tasks, strike:{}, change:false};
+                            $scope.taskList.push($scope.task);
+                            $scope.tasks="";
+                            $scope.saveArray();
+                       }
+                   }
+
+                   $scope.removeTask=(index)=>{
+                        $scope.taskList.splice(index,1);
+                        $scope.saveArray();
+                    }
+
+
+                   $scope.strikeOut=(change, index)=>{
+                       console.log(change+" "+index);
+                       if(change==true){
+                           $scope.taskList[index].strike={"text-decoration":"line-through"};
+                           $scope.taskList[index].change=true;
+                       }else{
+                           $scope.taskList[index].strike={};                           
+                           $scope.taskList[index].change=false;
+                       }
+                       $scope.saveArray();
+                }
+
+               $scope.saveArray=()=>{
+                   localStorage.setItem("angularToDo",JSON.stringify($scope.taskList));
+               }
+
+            })  
+    </script>
+</body>
+</html>

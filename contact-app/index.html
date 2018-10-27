@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Contact App</title>
+    <script src="angular1.5.1.js"></script>
+    <script src="angular_route_1.5.1.js"></script>
+    <script src="jquery.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+     integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
+    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <style>
+        input.ng-invalid {
+                background-color:red;
+            }
+            input.ng-valid {
+                background-color:white;
+            }
+            input.ng-pristine {
+                background-color:white;
+            }
+    </style>
+</head>
+<body ng-app="contacts"  ng-init="contactList=[]; isAuthenticate='false'"  >
+        <nav class="navbar navbar-default">
+               <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a href="#/contact" class="navbar-brand">Contact</a>
+                        <a href="#/add" class="navbar-brand">Add</a>                        
+                    </div> 
+                    <label class="nav navbar-nav navbar-right">User : {{userLog}}</label>                    
+                </div>
+           </nav>
+    <hr>
+    <section ng-view></section>
+
+    <script>
+        var isAuthenticate=false;
+        var user="";
+        angular.module("contacts",["ngRoute"])
+                .config(function($routeProvider){
+                    $routeProvider
+                    .when("/contact",{
+                        controller:"contactControl",
+                        templateUrl:"templates/contact.html"
+                    })
+                    .when("/add",{
+                        controller:"addControl",
+                        templateUrl:"templates/add.html"
+                    })
+                    .when("/edit/:editId",{
+                        controller:"editControl",
+                        templateUrl:"templates/edit.html"
+                    })
+                    .when("/login",{
+                        controller:"loginControl",
+                        templateUrl:"templates/login.html"
+                    })
+                    .otherwise({
+                        redirectTo:"/contact"
+                    })
+                })
+                
+                .service("contactService",function($q){
+                    var obj={};
+                    obj.contactLists=(function(){
+                        return $q(function(resolve){                            
+                        var list=[{id:101, name:"abc",number:"987",email:"a@faga.com"},
+                        {id:102, name:"xyz",number:"1223",email:"a@faga.com"},
+                        {id:103, name:"jkl",number:"789",email:"a@faga.com"}];
+                            resolve(list);
+                        })
+                    })
+                    return obj;
+                })
+                .controller("contactControl",function($scope, contactService,$location){
+                    // $scope.userName="0000";
+                    $scope.userLog=user;
+                    console.log($scope.userLog);
+                    if($scope.contactList.length==0){ 
+                        console.log($scope.contactList);
+                                contactService.contactLists().then(function(response){
+                                    for(var i=0;i<response.length;i++){
+                                            $scope.contactList.push(response[i]);
+                                    }
+                     })                    
+                    }
+
+                    $scope.deleteButton=(i)=>{
+                        $scope.userLog=user;
+                        if(isAuthenticate==true){
+                                if(confirm("Do u really want to delete???")){
+                                    $scope.contactList.splice(i,1);
+                                }
+                        }else{
+                            $location.path("/login");
+                        }                    
+                    }
+                    $scope.contactList;
+                })
+                .controller("addControl",function($scope, $location){
+                    if(isAuthenticate==true){
+                        $scope.redirect=()=>{
+                            if($scope.id!=undefined && $scope.name!=undefined && $scope.number!=undefined && $scope.email!=undefined){
+                            var contact={
+                                id:$scope.id,
+                                name:$scope.name,
+                                number:$scope.number,
+                                email:$scope.email,
+                            }
+                        $scope.contactList.push(contact);
+                        console.log($scope.contactList);
+                        $location.path("/contact");
+                        }
+                        }
+                    }else{
+                        $location.path("/login");
+                    }
+                })
+                .controller("editControl",function($scope,$location){
+                    if(isAuthenticate==true){
+                        $scope.editId=Number($location.path().slice(6));
+                        var index;
+                        for(var i=0;i<$scope.contactList.length;i++){
+                            if($scope.contactList[i].id==$scope.editId){
+                                index=i;
+                                $scope.editName=$scope.contactList[i].name;
+                                $scope.editNumber=Number($scope.contactList[i].number);
+                                $scope.editEmail=$scope.contactList[i].email;
+                            }
+                        }
+
+                        $scope.edit=()=>{
+                            if($scope.editName!=undefined && $scope.editNumber!=undefined && $scope.editEmail!=undefined){
+                         
+                            $scope.contactList[index].name=$scope.editName;
+                            $scope.contactList[index].number=$scope.editNumber;
+                            $scope.contactList[index].email=$scope.editEmail;
+                            
+                            $location.path("/contact");
+                            }
+                        }
+                        }else{
+                            $location.path("/login");
+                        }
+                })
+                .controller("loginControl",function($scope,$location, $rootScope){
+                    var userList=[{name:"super", password:"123"},{name:"root",password:"789"}];
+                    $scope.authentication=()=>{
+                        for(var i=0;i<userList.length;i++){
+                            if($scope.userName==userList[i].name && $scope.password==userList[i].password){
+                                user=userList[i].name;
+                                $rootScope.userLog=user;
+                                isAuthenticate=true;
+                                $location.path("/contact");
+                            }
+                        }                    
+                        
+                    }
+                })
+    </script>
+    
+</body>
+</html>

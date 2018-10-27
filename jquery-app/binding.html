@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binding</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+        Message          :
+        <input type="text" id="message"><br><br>
+
+        Font Size        :
+        <input type="number" id="fontSize"><br><br>
+
+        Background Color :
+        <select id="colorBackground"></select >
+        <br><br>
+    
+        Font Color       :
+        <select id="colorFont"> </select >
+        <br><br><br><br>
+
+        <textarea name="displayArea" id="displayArea" cols="200" rows="30"></textarea>
+
+        <script>
+
+           (function(){ 
+            var colorList=[{color:"",code:""},{color:"Red",code:"#ff8080"},{color:"Blue",code:"#8080ff"},{color:"Green", code:"#80ff80"},
+            {color:"Yellow",code:"#ffff80"},{color:"Black", code:"#000000"},{color:"White",code:"#fffffff"}];
+
+            var display=$("#displayArea");
+        
+            $("#message").keyup(function(){
+                display.val($("#message").val());
+            });
+
+            $("#fontSize").keypress(function(){ 
+                console.log()
+                if(event.charCode==13){
+                display.css("font-size",$("#fontSize").val()+"px");
+                }
+            });
+
+            dropDownList("#colorBackground");
+            $("#colorBackground").click(function(){
+                display.css("background-color",this.value);  
+            });
+            
+            dropDownList("#colorFont");
+            $("#colorFont").click(function(){
+                display.css("color",this.value);  
+            });
+
+            function dropDownList(elementID){
+                for(var i=0;i<colorList.length;i++){
+                $(elementID).append("<option value="+colorList[i].code+">"+colorList[i].color+"</option>");
+                }
+            }
+        })();
+        </script>
+
+</body>
+</html>

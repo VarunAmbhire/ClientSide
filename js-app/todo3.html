@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>To-Do 3</title>
+    </head>
+    <body>
+        <!-- <form id="taskForm"> -->
+            Task :
+            <input type="text" id="taskText" onkeypress="addTask(event)">
+        <!-- </form> -->
+
+        <div id="mainTask"></div>
+
+        <script>   
+            var taskList=[];
+            retreiveData(); 
+            
+            function addTask(event){    
+                if(event.key=='Enter'){
+                    var text=document.querySelector("#taskText");
+                    addToDataBase(text.value);
+                    text.value="";
+                    retreiveData();            
+                }
+            }
+
+            function addToDataBase(textInput){
+                var date =Date();
+                var data={};
+                data.text=textInput;
+                data.date=date; 
+                data.isCompleted=false;    
+                taskList.push(data);
+                localStorage.setItem("swabhav.task",JSON.stringify(taskList));
+            }
+
+            function retreiveData(){
+                      taskList=JSON.parse(localStorage.getItem("swabhav.task"));
+                      createView();
+            }
+            
+            function createView(){
+                    document.querySelector("#mainTask").innerHTML="";
+                    var mainTask=document.querySelector("#mainTask");
+                        for(var i=0; i<taskList.length;i++){                                                
+                                var div=document.createElement("div");
+                                var label=document.createElement("LABEL");
+                                var checkBox=document.createElement("input");
+                                checkBox.type="checkbox";
+                                var button=document.createElement("BUTTON");
+
+                                label.innerHTML=taskList[i].text;
+                                checkBox.checked=taskList[i].isCompleted;
+                                button.innerHTML="X";
+
+                                checkBox.setAttribute("id","CheckBox"+i);
+                                button.setAttribute("id","Button"+i);
+                                label.setAttribute("id","Label"+i);
+                                div.setAttribute("id",+i);
+
+                                checkBox.addEventListener("click",markTask);
+                                button.addEventListener("click",removeTask);
+
+                                mainTask.appendChild(div);
+                                div.appendChild(label);
+                                div.appendChild(checkBox);
+                                div.appendChild(button);  
+                        }
+            }       
+            
+            function markTask(event){                    
+                var child=event.srcElement.id;
+                var msg=document.getElementById(child).parentNode.firstChild.innerHTML;
+                var keyIndex=document.getElementById(child).parentNode.id;
+                var mark=event.srcElement.checked;
+                    if(mark==true){                        
+                        taskList[keyIndex].text=msg.strike();
+                            taskList[keyIndex].isCompleted=true;
+                    }else if(mark==false){                                        
+                        taskList[keyIndex].text=msg.slice(8,-9);
+                            taskList[keyIndex].isCompleted=false;
+                    }
+                localStorage.setItem("swabhav.task",JSON.stringify(taskList));  
+                retreiveData();                            
+            }
+
+            function removeTask(event){
+                if(confirm("Do you really want to remove Task?")){                
+                    var childId=event.srcElement.id;
+                    var msg=document.getElementById(childId).parentNode.id;
+                    taskList.splice(msg,1);
+                    localStorage.setItem("swabhav.task",JSON.stringify(taskList));
+                    retreiveData();
+                }       
+            }
+
+        </script>
+    </body>
+</html>

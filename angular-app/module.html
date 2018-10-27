@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Module</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="modeA">
+    <div ng-controller='controlA'>
+        Module A :<br>
+        {{data.description}}
+        <hr>
+    </div>
+
+    <div ng-controller='controlB'>
+            Module B :<br>
+            {{company.name}}
+            <hr>
+    </div>
+     
+    <div ng-controller='controlC'>
+                Module C :<br>
+                {{company.name2}}
+                <hr>
+    </div>    
+    <script>
+        angular.module('modeA',['modeB','modeC'])
+               .controller('controlA', function($rootScope){
+                   console.log("Inside Controller A");
+                   $rootScope.company={name:"Swabhav", name2:"Techlabs"}
+        });
+
+        angular.module('modeB',[])
+                .controller('controlB', function(){
+        });
+        
+        angular.module('modeC',[])
+               .controller('controlC', function(){
+        });           
+    </script>
+</body>
+</html>

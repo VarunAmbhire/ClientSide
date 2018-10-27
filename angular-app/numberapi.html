@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Number Api</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="number" ng-controller="numControl">
+    <div>
+        <p>Enter Number : </p>
+        <input type="number" ng-model="number">
+        <input type="button" value="search" ng-click="checkFact()">
+    </div>
+    <div ng-show="loading">
+        <img src="http://192.168.137.1/angular-app/pictures/spinner.gif">
+    </div>
+    <ul ng-show="!loading">
+        <li ng-repeat="fact in data track by $index">{{fact}}</li>
+    </ul>
+
+    <script>
+        angular.module("number",[])
+                .factory("getFacts",function($http,$q,$timeout){
+                    var obj={};
+                    obj.fact=(num)=>{                       
+                            return $timeout(function(){return $http.get("http://numbersapi.com/"+num)},3000);                           
+                        }
+                    obj.retriveData=()=>{
+                        return $timeout(function(){return $q(function(resolve){
+                            resolve(JSON.parse(localStorage.getItem("angularNumber")));
+                            })},3000);
+                        }
+                    obj.saveData=(data)=>{
+                        return $q(function(resolve){
+                            resolve(localStorage.setItem("angularNumber",JSON.stringify(data)));
+                        },3000)
+                    }                                         
+                    return obj;                     
+                })
+               .controller("numControl",($scope,getFacts)=>{ 
+                    $scope.data=[];                                                      
+                    $scope.loading=true;
+                    getFacts.retriveData().then(function(r){
+                        $scope.data=r;                        
+                        $scope.loading=false;  
+                    });    
+                    $scope.checkFact=()=>{
+                        $scope.loading=true;
+                        getFacts.fact($scope.number)
+                            .then(function(response){
+                                $scope.data.push(response.data);
+                                getFacts.saveData($scope.data).then();
+                                $scope.loading=false;
+                            });
+                        $scope.number="";                     
+                        } 
+                })
+
+    </script>
+</body>
+</html>

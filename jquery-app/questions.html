@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Question Bank</title>
+    <script src="jquery.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script> 
+</head>
+<body>
+    <div id="questionWindow">        
+    </div>
+
+    <div id="canvasChart" height="500" width="500"></div>
+    <script>
+
+        var question=[];
+        var i=0;
+        var right=0;
+
+        loadJson();
+        function loadJson(){
+            $.getJSON("/jquery-app/question.json", function(data){
+                question=data;
+                createView();
+            }
+        );
+        }
+
+        function createView(){ 
+            $("#canvasChart").html("");             
+            $("#questionWindow").html("");
+                $("<p>").text(question[i].id+" / "+question.length).appendTo($("#questionWindow"));
+                $("<p>").text(question[i].content).appendTo($("#questionWindow"));
+                for(var j=0; j<question[i].option.length; j++){
+                    $("<input type=radio name=option"+i+" id=option["+j+"] value=option["+j+"]>"+question[i].option[j]+"</input><br>")
+                    .appendTo($("#questionWindow"));
+                    $("option[1]").prop("checked", true);
+                }                
+                $("<input type=button id=next value=next>").on("click",nextQuestion).appendTo($("#questionWindow"));            
+        }
+
+        function nextQuestion(){            
+            var val = $("input[name='option"+i+"']:checked").val(); 
+            if(val==question[i].answer){
+                right++;
+            }
+            $("#questionWindow").html("");
+            if(i<question.length-1){
+                i++;
+                createView();
+            }else{
+                showResult();
+            }
+        }
+        
+        function showResult(){
+            var len=question.length;
+            var percentage=(right/len)*100;
+            var wrong=len-right;
+            var result="Out of <b>"+len+"</b> <b style='color:blue'>"+right+
+                "</b> right and <b style='color:red'>"+wrong+
+                "</b> wrong.<br> <h3>Accuracy:"+percentage+"%</h3>";
+            $("<p>").html(result).appendTo($("#questionWindow"));
+             i=0;
+             right=0;   
+            $("<input type=button value=Restart>").on("click",createView).appendTo($("#questionWindow")); 
+            canvasChart(percentage);
+        }   
+
+        function canvasChart(percentage){
+            $("#canvasChart").CanvasJSChart({
+                data:[
+                    {
+                        type:"pie",
+                        dataPoints:[{
+                            label:"Correct", y:percentage
+                        },{
+                            label:"wrong", y:100-percentage                        }]
+                    }
+                ]
+            });
+        i=0;
+        }
+
+    </script>
+</body>
+</html>

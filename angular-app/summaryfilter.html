@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Summary Filter</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="customFilter" ng-controller="customFilterControl">
+    <div>
+        Enter Text : <input type="text" ng-model="textData">
+        Enter Size :<input type="number" ng-model="size">
+    <p >
+        {{textData|summary: size}}
+    </p>
+    </div>
+
+    <script>
+        angular.module("customFilter",[])
+               .controller("customFilterControl",($scope)=>{
+                    $scope.textData="";
+                    $scope.size=5;
+               })
+               .filter("summary",function(){
+                   return function(text, number){
+                       var display=text.substring(0, number);
+                       var star=text.substring(number,text.length);
+                       var dot="";
+                       for(var i=0;i<star.length;i++){
+                           dot=dot.concat("*");
+                       }
+                        console.log(dot);
+                       return display+""+dot;
+                   }
+               })    
+    </script>
+</body>
+</html>

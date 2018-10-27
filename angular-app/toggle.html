@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Toggle Button</title>
+    <script src="angular.js"></script>    
+</head>
+<body ng-app="toggle">
+    <div ng-controller="toggleController" ng-init="init()">
+            <input type="button" value="{{status}}" ng-click="toggleButton()" ng-style="colorChange">
+    </div>
+
+    <script>
+        angular.module("toggle",[])
+               .controller("toggleController",($scope)=>{
+                   $scope.init=()=>{
+                       $scope.status=false;
+                       $scope.colorChange={"background-color" :'red'};
+                   }
+
+                   $scope.toggleButton=()=>{
+                    $scope.status=!$scope.status;
+                    if($scope.status==false){
+                        $scope.colorChange={"background-color" :'red'};
+                       }else{
+                        $scope.colorChange={"background-color" :'green'};                           
+                       }
+                   }
+                   
+               })    
+    </script>
+</body>
+</html>

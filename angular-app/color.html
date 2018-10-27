@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Color</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="color" ng-controller="colorControl" ng-style="{background:selectedColor}">
+        <select ng-model="selectedColor" ng-options="color for color in colorList">
+        </select>
+
+    <script>
+        angular.module("color",[])
+                .controller("colorControl",($scope)=>{
+                $scope.colorList=["red",'blue','green','yellow'];
+        })
+    </script>
+</body>
+</html>

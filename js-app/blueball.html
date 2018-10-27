@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <title>BlueBall Game</title>
+    <style>
+        
+    </style>
+    
+    </head>
+    <body>
+
+            <p id="attemptDisplay"></p>
+            <p id="resultDisplay"></p>
+
+        <div id="ruleWindow">
+                   <h1>Rules</h1>
+                    <ul>
+                        <li>Game contains 50 balls out of that 1 ball is Blue.</li>
+                        <li>Initially all balls are Grey in color.</li>
+                        <li>You have 5 attempts to guess tha ball.</li>
+                        <li>All balls which are left side of Blue ball are Red in color</li>
+                        <li>All balls which are right side of Blue ball are Ggreen in color</li>
+                    </ul>
+
+                    <input type="button" value="Start" id="startButton"  onClick="gameStart()"/>
+        </div>
+
+
+        <div id="gameWindow">
+        </div>
+
+        <div id="restartButtonWindow"></div>
+        
+        <script>
+            var blueNumber;           
+            var displayGuess=document.querySelector("#attemptDisplay");
+            var displayResult=document.querySelector("#resultDisplay");
+
+
+            function gameStart(){
+                document.querySelector("#ruleWindow").innerHTML="";
+                document.querySelector("#gameWindow").innerHTML="";
+                document.querySelector("#restartButtonWindow").innerHTML="";
+
+                displayGuess.innerHTML="Remaining Attempt : 5";
+                displayResult.innerHTML="Playing";
+
+                var mainWindow=document.querySelector("#gameWindow");
+                blueNumber=Math.floor(Math.random()*50);
+                countGuess=5;
+                count=0;
+
+                for(index=1;index<=50;index++){
+                    var button=document.createElement("BUTTON");
+                    button.setAttribute("id",index);
+                    button.innerHTML=index;
+                    button.addEventListener('click',gamePlay);
+                    button.style.width=100;
+                    button.style.height=100;
+                    button.style.margin=5;
+                    button.style.borderRadius="50%";
+                    mainWindow.appendChild(button);
+                }
+            }
+            
+            var countGuess;            
+            var count=0;
+
+            function ballColor(ballNumber){
+                if(ballNumber<blueNumber){
+                    return "red";
+                }else if(ballNumber>blueNumber){
+                    return "green";
+                }
+            }
+
+            function gamePlay(event){        
+                var ball=event.srcElement;
+                var ballNumber=ball.id;
+
+                    if(countGuess<=0){
+                        ball="";     
+                    }
+
+                    countGuess--;
+                    if(ballNumber==blueNumber){
+                          ball.style.backgroundColor="blue";
+                          displayResult.innerHTML="Winner";
+                          countGuess=0;
+                          count++;
+                          gameEnd();
+                    }
+                    ball.style.backgroundColor=ballColor(ballNumber);                        
+                
+                    if(countGuess==0 && count==0){
+                            gameEnd();
+                            displayResult.innerHTML="Failed";
+                            count++;
+                    }                
+                displayGuess.innerHTML="Remaining Attempt : "+countGuess;    
+            }
+
+            function gameEnd(){
+                var restartButton=document.createElement("button");
+                restartButton.setAttribute("id","restart");
+                restartButton.innerHTML="Restart";
+                restartButton.addEventListener('click',gameStart);
+                restartButton.style.width=100;
+                restartButton.style.height=100;
+                restartButton.style.backgroundColor="yellow";
+                // restartButton.style.marginTop=0;
+                document.querySelector("#restartButtonWindow").appendChild(restartButton);
+            }    
+
+        </script>
+
+    </body>
+</html>

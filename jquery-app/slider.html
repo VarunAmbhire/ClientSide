@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Slider</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+
+    <input type="range" min="1" max="100" value="10" id="slider">
+    <div id="display"></div>
+
+    <div id="buttonDisplay"></div>
+    
+    <script>
+    
+    (function(){
+    var slider=$("#slider");
+    buttonGenerator(slider.val());    
+        slider.click(function(){
+            $("#display").html(slider.val());            
+            $("#buttonDisplay").html("");
+            buttonGenerator(slider.val());
+        });
+
+
+        function buttonGenerator(number){
+            for(var i=1;i<=number;i++){
+                $("#buttonDisplay").append("<button id=button"+i+">"+i+"</button>");
+                $("#button"+i).on("click",buttonClick)
+                              .css("margin",10)
+                              .height(30)
+                              .width(40);
+            }
+        }
+
+        function buttonClick(event){
+            $("#display").html(this.id+" is Clicked");
+        }
+    })();
+    </script>
+    
+</body>
+</html>

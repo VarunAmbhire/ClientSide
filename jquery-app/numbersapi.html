@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Numbers Fact</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+    Add Number for facts :
+    <input type="text" id="text">
+    <input type="button" id="check" value="Check Fact">
+
+    <br><br>
+    <div id="list"></div>
+
+    <script>
+        (function(){
+        $("#check").on("click",checkFact);
+        var listData=[];
+
+        createView();
+
+        function checkFact(){
+            var number=$("#text").val();
+            if(number!=""){
+                var url="http://numbersapi.com/"+number;
+                $.ajax({url, success: function(data){
+                    var obj={};
+                    obj.text=data;
+                    obj.num=number;
+                    listData.push(obj);            
+                    storeData();
+                    createView();
+                }});
+            }
+            $("#text").val("");
+            
+        }
+
+        function createView(){
+            retreiveData();
+            $("#list").html("");
+            var color;
+
+            for(var i=0;i<listData.length;i++){
+                var num=(listData[i].num)
+                if(num%2==0){
+                    color="red";
+                }else{
+                    color="blue";
+                }
+                $("<li>").text(listData[i].text).appendTo($("#list")).css("background-color",color);
+            }            
+        }
+
+        function storeData(){
+            localStorage.setItem("swabhav.jlist",JSON.stringify(listData));
+        }
+
+        function retreiveData(){
+            listData=JSON.parse(localStorage.getItem("swabhav.jlist"));
+        }
+    })();
+    </script>
+</body>
+</html>

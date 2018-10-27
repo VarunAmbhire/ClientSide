@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binding</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="bind" ng-controller="bind-control">
+    <div>
+        <h1>One Way</h1>
+        <h4>{{rollNo}}<br>
+            {{name}}<br>
+            {{designation}}<br>
+            {{company}}<br>
+        </h4>
+    </div><hr>
+
+    <div>
+            <h1>Two Way</h1>
+            <input type="text" ng-model="rollNo"><br>
+            <input type="text" ng-model="name"><br>
+            <input type="text" ng-model="designation"><br>
+            <input type="text" ng-model="company"><br>
+            </h4>
+    </div><hr>
+
+    <div>
+        <h1>One Time</h1>
+        <h4>{{::rollNo}}<br>
+            {{::name}}<br>
+            {{::designation}}<br>
+            {{::company}}<br>
+        </h4>
+    </div><hr>
+
+    <script>
+    angular.module("bind",[])
+           .controller("bind-control",($scope)=>{
+               $scope.rollNo=101;
+               $scope.name="abc";
+               $scope.designation="dev";
+               $scope.company="xyz"
+           })
+
+    </script>
+</body>
+</html>

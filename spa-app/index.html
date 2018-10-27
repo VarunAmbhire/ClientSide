@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SPA-APP</title>
+    <script src="angular1.5.1.js"></script>
+    <script src="angular_route_1.5.1.js"></script>
+</head>
+<body ng-app="spa">
+    <a href="#/home">Home</a>
+    <a href="#/about">About</a>
+    <a href="#/career">Career</a>
+    <a href="#/employee/102">Employee</a>
+
+    <section ng-view>
+
+    </section>
+    <script>
+        angular.module("spa",["ngRoute"])
+               .config(function($routeProvider){
+                   $routeProvider
+                   .when("/home",{
+                       controller :"homeControl",
+                       templateUrl:"templates/home.html"
+                   })
+                   .when("/about",{
+                       controller :"aboutControl",
+                       templateUrl:"templates/about.html"
+                   })
+                   .when("/career",{
+                       controller :"careerControl",
+                       templateUrl:"templates/career.html"
+                   })
+                   .when("/employee/:id",{
+                       controller:"employeeControl",
+                       templateUrl:"templates/employee.html"
+                   })
+                   .otherwise({
+                       redirectTo:"/home"
+                   });
+               })
+               .controller("homeControl",function($scope){
+                   $scope.home="Home Page Content";
+               })
+               .controller("aboutControl",function($scope){
+                     $scope.about="About Company";                   
+                })
+                .controller("careerControl",function($scope){
+                    $scope.career="Career options";
+                })
+                .controller("employeeControl",function($scope, $routeParams){
+                    $scope.id=$routeParams.id;
+                })
+            </script>
+</body>
+</html>

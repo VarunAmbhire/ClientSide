@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Async Promise</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+    <script>
+        var dataServer=function(){
+            var obj={};
+            obj.getData=function(){ 
+                return new Promise(function(resolve,reject){
+                    var num=Math.random*10;
+                    if(num>5){
+                        resolve(num);
+                    }else{
+                        reject("Not acceptable");
+                    }
+                })
+            }
+            return obj;
+        }();
+        
+        dataServer.getData().then(function(r){
+                console.log(r);
+        }).catch(function(err){
+                console.log(err);
+        });
+        
+
+
+        console.log("End Of Program");    
+    </script>
+</body>
+</html>

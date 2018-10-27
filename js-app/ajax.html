@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <title>AJAX Implementation</title>
+    </head>
+
+    <body>
+        <p id="display"></p>
+        <input type="button" id="button" value="Click Me" onClick="loadAjax()"><br><br>
+
+        <iframe id="miniBrowser" width="500" height="500"> </iframe>
+
+        <script>
+            function loadAjax(){
+                var xHttp=new XMLHttpRequest();
+                xHttp.onreadystatechange=function(){
+                    if(this.readyState==4 && this.status==200){
+                        document.querySelector("#miniBrowser").srcdoc=this.responseText;
+                        console.log(this.responseText);
+                    }
+                };
+                xHttp.open("GET","index.html",true);
+
+                xHttp.send();
+                console.log("End of Program");
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Button Case 2</title>
+        
+   
+    </head>
+    <body>
+        <button type="button" id="red" onclick="changeColor(red.id)">Red</button>
+        <button type="button" id="blue" onclick="changeColor(blue.id)">Blue</button>
+
+    <p id="paragraph"> </p>
+      
+    <script>
+
+                function changeColor(color){
+                    console.log(color);
+                    var paragraph=document.querySelector("#paragraph");
+                        paragraph.innerHTML= "Selected color is "+color;
+                        document.bgColor=color;                 
+            }
+                           
+             </script>
+</body>
+</html>

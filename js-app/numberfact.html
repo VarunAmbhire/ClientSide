@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fact About Number</title>
+</head>
+<body>
+    <p>Enter The Number which you want yo check a fact</p>
+    <input type="text" id="numberInput">
+    <input type="button" id="click" value="Check Fact" onClick="checkFacts()">
+    <div>
+        <ul id="list"></ul>
+    </div>
+    
+        <script src="moment.js"> </script>             
+        <script>
+        var list=document.querySelector("#list");
+        var num=document.querySelector("#numberInput");   
+            var storeList=[];
+            getData();
+            view();
+            
+            function checkFacts(){
+
+                        var xhttp=new XMLHttpRequest();         
+                        xhttp.onreadystatechange=function(){
+                            if(this.readyState==4 && this.status==200 && num.value!=null){
+                                var date=new Date();
+                                var time=date.getFullYear()+""+date.getMonth()+""+date.getDay()+""+date.getTime();
+                                console.log(time);
+                                var obj={};
+                                obj.text=this.responseText;
+                                obj.time=time;                                
+                                // console.log(time);
+                                storeList.push(obj);
+                                view();            
+                                localStorage.setItem("swabhav.numbers",JSON.stringify(storeList));
+                                }
+                        };                     
+                            xhttp.open("GET","http://numbersapi.com/"+num.value);
+                            xhttp.send();
+                            num.value="";
+                }
+
+                function getData(){
+                    storeList=JSON.parse(localStorage.getItem("swabhav.numbers"));
+                }
+
+                function view(){
+                    list.innerHTML="";
+                        // if(storeList==[]){
+                            for(var i=storeList.length-1;i>=0;i--){                        
+                                var msg=document.createElement("li");             
+                                console.log(storeList[i].time);       
+                                msg.innerHTML=storeList[i].text+"\n\n "+moment().startOf('storeList[i].time').fromNow();
+                                list.appendChild(msg);
+                            }
+                        // }    
+                }
+        </script>
+</body>
+</html>

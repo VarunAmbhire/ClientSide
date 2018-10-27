@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Collection</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="student">
+    <div ng-controller="studControl">
+        <p ng-repeat="stud in data">{{stud}}</p>
+    </div>
+    
+    <script>
+        angular.module('student',[])
+                .controller('studControl',($rootScope, $timeout)=>{
+                    $rootScope.data=["Stud1","Stud2","Stud3"];
+
+                    $timeout( () => {
+                        $rootScope.data=['A','B','C'];
+                    }, 2000);  
+        })
+          
+            
+    </script>
+</body>
+</html>

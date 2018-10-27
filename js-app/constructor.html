@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Constructor Pattern</title>
+    </head>
+    <body>
+
+        <script>
+            function Customer(fName, lName){
+                this.fName=fName;
+                this.lName=lName;
+                this.getFullName=function(){
+                    return this.fName+" "+this.lName;
+                }
+            }
+
+            var c1=new Customer("Abc","xyz");
+            console.log(c1.getFullName()); 
+            c1.fName="qwerty";
+            c1.lName="";
+            console.log(c1.getFullName());
+
+
+            function Employee(){
+                var _eNo, _eName;
+                
+                this.setENo=function(no){
+                    if(no>0){
+                        _eNo=no;
+                    }   
+                };
+
+                this.setEName=function(name){
+                    if(name!=""){
+                        _eName=name;
+                    }
+                };                
+
+                this.getDetails=function(){
+                    return _eNo+" "+_eName;
+                }
+            }
+
+            var e1=new Employee();
+            e1.setENo(100);
+            e1.setEName("asd");
+
+            console.log(e1.getDetails());
+
+            e1.setEName="";
+            console.log(e1.getDetails());
+
+        </script>
+    </body>
+</html>

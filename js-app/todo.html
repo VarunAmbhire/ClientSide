@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>To-Do</title>
+    </head>
+    <body>
+        <b>Task:</b>
+        <input type="text" id="taskText"/>
+        <button id="addButton" onclick="addTask()">Add</button>
+
+        <ul id="taskList">
+            
+        </ul>
+        <script>
+            var mainList=document.querySelector("#taskList"); 
+            function addTask(){
+                var task=document.querySelector("#taskText");
+                   
+                var listData= document.createElement("li");
+                listData.innerHTML=task.value;       
+                mainList.appendChild(listData);
+                task.value="";
+            }
+            
+
+        </script>
+    </body>
+</html>

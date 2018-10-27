@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>Toggle Button</title>
+        
+    </head>
+
+
+    <body>
+      <button id="toggleButton" value="OFF" onclick="toggleEvent()">
+            
+      </button> 
+
+      <script>
+
+            var textOnButton=document.querySelector("#toggleButton");                           
+            var text=textOnButton.value;
+            textOnButton.innerHTML=text;
+            textOnButton.style.backgroundColor="red";
+
+            function toggleEvent(){     
+            console.log(text);
+                        if(text=="OFF"){
+                            textOnButton.innerHTML="ON";
+                            text="ON";
+                            textOnButton.style.backgroundColor="green";
+                            console.log(text);
+                        }else if(text=="ON"){
+                            textOnButton.innerHTML="OFF";
+                            text="OFF";
+                            textOnButton.style.backgroundColor="red";
+                            console.log(text);
+                        }                            
+                }
+      </script>
+    </body>
+</html>

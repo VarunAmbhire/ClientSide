@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit</title>
+</head>
+<body>
+        <div class="form-group">
+                Id :<input type="number" class="form-control" ng-model="editId" ng-required="true"><br>
+                Name : <input type="text" class="form-control" ng-model="editName" ng-required="true"><br>
+                Number : <input type="number" class="form-control" ng-model="editNumber" ng-required="true"><br>
+                Email : <input type="email" class="form-control" ng-model="editEmail" ng-required="true"><br>
+            </div>
+        
+            <input type="button" class="btn btn-primary" value="Save" ng-click="edit()">
+</body>
+</html>

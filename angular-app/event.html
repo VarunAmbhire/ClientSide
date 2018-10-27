@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Event</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="event">
+    <input type="button" id="button" value="Load" ng-click="buttonClick()">
+    <div ng-controller="eventContol">
+        Roll No.   : {{studData.rollNo}} <br>
+        First Name : {{studData.fName}} <br>
+        Second Name: {{studData.lName}} <br>
+        Photo      : 
+        <img height="200" ng-src="{{studData.photo}}">
+    </div>
+
+    <script>
+        angular.module('event',[])
+               .controller('eventContol',($rootScope)=>{
+                    $rootScope.buttonClick = () => {
+                        $rootScope.studData={rollNo:001,fName:"abc",lName:"xyz",photo:"http://192.168.137.1/angular-app/pictures/student.jpg"};            
+                    }   
+                })
+                
+    </script>
+</body>
+</html>

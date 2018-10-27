@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Drop Down Color</title>
+    <script src="jquery.js"></script>
+</head>
+<body>
+    <select id="colorList">
+            <option id="red" value="#ff8080">red</option>
+            <option id="blue" value="#8080ff" >blue</option>
+            <option id="green" value="#80ff80">green</option>
+            <option id="yellow" value="#ffff80">yellow</option>            
+    </select >
+
+
+    <script>
+        changeColor($('#colorList').val());
+    
+        $("#colorList").click(function(){
+            changeColor($('#colorList').val());
+        });
+
+        function changeColor(value){
+            $("body").css("background-color",value);
+        }
+
+    </script>
+</body>
+</html>

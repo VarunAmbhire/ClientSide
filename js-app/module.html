@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Module Pattern</title>
+    </head>
+    <body>
+        <script>
+            function makeCustomer(){
+                var obj={};
+                var _fName, _lName;
+
+                obj.setFirstName=function(name){
+                    if(name!=""){
+                        _fName=name;
+                    }
+                }
+                obj.setLastName=function(name){
+                    if(name!=""){
+                        _lName=name;
+                    }
+                }
+                obj.getFullName=function(){
+                    return _fName+" "+_lName;
+                }
+               return obj; 
+            }    
+
+            var c1=makeCustomer();
+            c1.setFirstName("asasasas");
+            c1.setLastName("qwerty");
+            console.log(c1.getFullName());
+
+            var swabhav=function(){
+                var obj={};
+                obj.evenNumber=function(number){
+                    if(number%2==0)
+                        return number+" is Even Number.";
+                    throw number+ " is not even Number.";
+                }
+               return obj; 
+            }();
+
+
+            console.log(swabhav.evenNumber(4));
+            console.log(swabhav.evenNumber(7));
+        </script>
+    </body>
+</html>

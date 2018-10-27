@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Service</title>
+    <script src="angular.js"></script>
+</head>
+<body ng-app="services" ng-controller="serviceControl">
+    <input type="text" ng-model="num">
+    <div ng-model="number">{{number}}</div>
+    <script>
+        angular.module("services",[])
+                .service("squares",function(){
+                     console.log("in service")
+                        this.sq = (num)=>{
+                            return (num*num);
+                        }
+               }) 
+               .controller("serviceControl",($scope, squares)=>{
+                   console.log("in control");
+                   $scope.num=0;
+                   $scope.number=squares.sq($scope.num);
+               })
+                  
+    </script>
+</body>
+</html>
